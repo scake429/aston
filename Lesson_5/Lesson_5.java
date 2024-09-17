@@ -11,6 +11,7 @@ public class Lesson_5{
         System.out.println(checkLeapYear(2300));
         changeArr();
         fillArr();
+        changeArrLessSix();
     }
 
     static void printThreeWords(){
@@ -88,6 +89,21 @@ public class Lesson_5{
         for (int i = 0; i < nums.length; i++) {
             nums[i] = i + 1;
             /*System.out.println(nums[i]);*/
+        }
+    }
+    static void changeArrLessSix() {
+        int nums[] = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
+        /*for (int i : nums) {
+            if (nums[i] < 6 ) {
+                nums[i] = nums[i] * 2;
+                System.out.println(i + "-й элемент нового массива равен " + nums[i]);
+            }
+        }*/
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < 6 ) {
+                nums[i] = nums[i] * 2;
+            }
+            System.out.println(i + "-й элемент нового массива равен " + nums[i]);
         }
     }
 }
