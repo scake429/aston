@@ -10,6 +10,7 @@ public class Lesson_5{
         printStr("Проверяем метод - печатаем в консоль строку", 3);
         System.out.println(checkLeapYear(2300));
         changeArr();
+        fillArr();
     }
 
     static void printThreeWords(){
@@ -80,6 +81,13 @@ public class Lesson_5{
                 nums[i] = 0;
             }
             System.out.println("Стало " + nums[i]);
+        }
+    }
+    static void fillArr(){
+        int nums[] = new int[100];
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = i + 1;
+            /*System.out.println(nums[i]);*/
         }
     }
 }
