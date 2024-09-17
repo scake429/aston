@@ -9,6 +9,7 @@ public class Lesson_5{
         System.out.println(checkNumberBool(0));
         printStr("Проверяем метод - печатаем в консоль строку", 3);
         System.out.println(checkLeapYear(2300));
+        changeArr();
     }
 
     static void printThreeWords(){
@@ -67,6 +68,18 @@ public class Lesson_5{
             return true;
         } else {
             return false;
+        }
+    }
+    static void changeArr() {
+        int[] nums = new int[] {1, 1, 0, 0, 1, 0, 1};
+        for (int i : nums) {
+            System.out.print("Было " + nums[i] + " ");
+            if (nums[i] == 0) {
+                nums[i] = 1;
+            } else {
+                nums[i] = 0;
+            }
+            System.out.println("Стало " + nums[i]);
         }
     }
 }
