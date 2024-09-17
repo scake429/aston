@@ -12,6 +12,7 @@ public class Lesson_5{
         changeArr();
         fillArr();
         changeArrLessSix();
+        arrTwoDimens();
     }
 
     static void printThreeWords(){
@@ -104,6 +105,18 @@ public class Lesson_5{
                 nums[i] = nums[i] * 2;
             }
             System.out.println(i + "-й элемент нового массива равен " + nums[i]);
+        }
+    }
+    static void arrTwoDimens() {
+        int [][] nums = new int[3][3];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums[i].length; j++) {
+                if (i == j) {
+                    nums[i][j] = 1;
+                }
+                /*System.out.println(nums[i][j]);*/
+            }
+            
         }
     }
 }
