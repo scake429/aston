@@ -86,14 +86,14 @@ public class Lesson_5{
         }
     }
     static void fillArr(){
-        int nums[] = new int[100];
+        int[] nums = new int[100];
         for (int i = 0; i < nums.length; i++) {
             nums[i] = i + 1;
             /*System.out.println(nums[i]);*/
         }
     }
     static void changeArrLessSix() {
-        int nums[] = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
+        int[] nums = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
         /*for (int i : nums) {
             if (nums[i] < 6 ) {
                 nums[i] = nums[i] * 2;
@@ -108,15 +108,15 @@ public class Lesson_5{
         }
     }
     static void arrTwoDimens() {
-        int [][] nums = new int[3][3];
+        int[][] nums = new int[5][5];
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < nums[i].length; j++) {
-                if (i == j) {
+                if ((i == j) || (i + j == nums[j].length - 1)) {
                     nums[i][j] = 1;
                 }
-                /*System.out.println(nums[i][j]);*/
+                System.out.print(" " + nums[i][j] + " ");
             }
-            
+            System.out.println();
         }
     }
 }
