@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Lesson_5{
     public static void main(String arg[]){
         printThreeWords();
@@ -13,6 +15,7 @@ public class Lesson_5{
         fillArr();
         changeArrLessSix();
         arrTwoDimens();
+        System.out.println(Arrays.toString(createOneDimensArr(5, 890)));
     }
 
     static void printThreeWords(){
@@ -118,6 +121,13 @@ public class Lesson_5{
             }
             System.out.println();
         }
+    }
+    static int[] createOneDimensArr(int len, int initialValue) {
+        int[] oneDimensArr = new int[len];
+        for (int i = 0; i < len; i++) {
+            oneDimensArr[i] = initialValue;
+        }
+        return oneDimensArr;
     }
 }
 
