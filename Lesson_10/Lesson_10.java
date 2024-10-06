@@ -13,7 +13,7 @@ public class Lesson_10 {
         } 
         
         Park myPark = new Park();
-        //for(Park park: myPark.listAttraction)
+        myPark.show();
     }
 }
 
@@ -39,12 +39,19 @@ class Employee {
 }
 
 class Park {
-    Attraction[] listAttraction = new Attraction[3];
+    Attraction[] listAttraction;
     Park() {
+        listAttraction = new Attraction[3];
         listAttraction[0] = new Attraction("Карусель", "10:00", "18:00", 350.00);
         listAttraction[1] = new Attraction("Комната страха", "10:00", "15:00", 150.00);
         listAttraction[2] = new Attraction("Колесо обозрения", "09:00", "21:00", 280.00);
     }
+    void show() {
+        for(Attraction parkAttr: this.listAttraction) {
+            System.out.println(parkAttr.name + " " + parkAttr.openTime + " " + parkAttr.closeTime + " " + parkAttr.price);
+        }
+    }
+
     class Attraction {
         String name;
         String openTime;
