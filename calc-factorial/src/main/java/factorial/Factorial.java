@@ -1,8 +1,10 @@
 package factorial;
 
 public class Factorial {
-    public Factorial() {};
-    public static long calc(int n) throws  Exception{
+    public Factorial() {
+    };
+
+    public static long calc(int n) throws Exception {
         long f;
         f = 1;
         if (n < 0) {
