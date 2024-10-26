@@ -1,9 +1,9 @@
 package lesson_15;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,13 +16,14 @@ public class MtsTests {
     WebDriver driver;
 
     @BeforeAll
-    static void setupClass() {
+    private static void setupClass() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     private void createDriver() {
         driver = new ChromeDriver();
+        driver.get("https://www.mts.by/");
     }
 
     @AfterEach
@@ -32,13 +33,25 @@ public class MtsTests {
 
     @Test
     public void test() {
-        driver.get("https://www.mts.by/");
+        String tel;
+        String sum;
+        String email;
+        tel = "297777777";
+        sum = "100.00";
+        email = "test@testmail.com";
 
-        driver.manage().deleteCookieNamed("BITRIX_SM_COOKIES_AGREEMENT");
-        driver.manage().addCookie(new Cookie("BITRIX_SM_COOKIES_AGREEMENT", "no"));
+        driver.manage().deleteAllCookies();
 
         String title = driver.getTitle();
         assertEquals("МТС – мобильный оператор в Беларуси", title);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            WebElement butCookieCanc = driver.findElement(By.cssSelector(".cookie__wrapper .cookie__cancel"));
+            wait.until(ExpectedConditions.elementToBeClickable(butCookieCanc));
+            butCookieCanc.click();
+        } catch (TimeoutException e) {
+        }
 
         WebElement sectPay = driver.findElement(By.cssSelector(".pay"));
 
@@ -52,12 +65,13 @@ public class MtsTests {
         WebElement ancorDetailedServ = sectPay.findElement(By.cssSelector("a"));
         assertEquals(ancorDetailedServ.isDisplayed(), true);
         assertEquals("Подробнее о сервисе", ancorDetailedServ.getText());
-        assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/", ancorDetailedServ.getAttribute("href"));
+        assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/",
+                ancorDetailedServ.getAttribute("href"));
 
         ancorDetailedServ.click();
-        assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/", driver.getCurrentUrl());
+        assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/",
+                driver.getCurrentUrl());
         driver.navigate().back();
-
 
         assertEquals("Услуги связи", driver.findElement(By.cssSelector("#pay-section .select__now")).getText());
         WebElement formPayments = driver.findElement(By.id("pay-connection"));
@@ -65,22 +79,37 @@ public class MtsTests {
         WebElement inputTel = formPayments.findElement(By.id("connection-phone"));
         inputTel.clear();
         inputTel.click();
-        inputTel.sendKeys("297777777");
+        inputTel.sendKeys(tel);
 
         WebElement inputSum = formPayments.findElement(By.id("connection-sum"));
         inputSum.clear();
         inputSum.click();
-        inputSum.sendKeys("100");
+        inputSum.sendKeys(sum);
 
         WebElement inputEmail = formPayments.findElement(By.id("connection-email"));
         inputEmail.clear();
         inputEmail.click();
-        inputEmail.sendKeys("test@testmail.com");
+        inputEmail.sendKeys(email);
 
         WebElement butt = formPayments.findElement(By.cssSelector("button[type=\"submit\"]"));
         assertEquals("Продолжить", butt.getText());
         butt.click();
 
-        driver.manage().deleteCookieNamed("BITRIX_SM_COOKIES_AGREEMENT");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("bepaid-iframe")));
+
+        WebElement iframePayment = driver.findElement(By.className("bepaid-iframe"));
+        driver.switchTo().frame(iframePayment);
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".app-wrapper__content")));
+        WebElement wrapPayment = driver.findElement(By.cssSelector(".app-wrapper__content"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), '" + sum + " BYN')]")));
+        assertTrue(wrapPayment.findElement(By.xpath("//*[contains(text(), '" + sum + " BYN')]")).isDisplayed());
+        assertTrue(wrapPayment
+                .findElement(By.xpath("//*[contains(text(), 'Оплата: Услуги связи\r\n" + "Номер:375" + tel + "')]"))
+                .isDisplayed());
+        wait.until(
+                ExpectedConditions.textToBePresentInElementLocated(By.xpath("//button"), "Оплатить " + sum + " BYN"));
+        assertTrue(wrapPayment.findElement(By.xpath("//button[contains(text(), 'Оплатить  " + sum + " BYN')]"))
+                .isDisplayed());
     }
 }
