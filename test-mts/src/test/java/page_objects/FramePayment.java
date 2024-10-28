@@ -9,8 +9,9 @@ public class FramePayment {
     public static By byWrap = By.cssSelector(".app-wrapper__content");
     public static By byPayButt = By.xpath("//button");
 
-    public FramePayment() {}
-    
+    public FramePayment() {
+    }
+
     public static WebElement frame(WebDriver driver) {
         return driver.findElement(By.className("bepaid-iframe"));
     }
@@ -28,7 +29,8 @@ public class FramePayment {
     }
 
     public static WebElement tel(WebDriver driver, String tel) {
-        return wrap(driver).findElement(By.xpath("//*[contains(text(), 'Оплата: Услуги связи\r\n" + "Номер:375" + tel + "')]"));
+        return wrap(driver)
+                .findElement(By.xpath("//*[contains(text(), 'Оплата: Услуги связи\r\n" + "Номер:375" + tel + "')]"));
     }
 
     public static WebElement payButt(WebDriver driver, String sum) {

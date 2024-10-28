@@ -52,10 +52,10 @@ public class MtsTests {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             WebElement butCookieCanc = CoockieActions.buttonCancel(driver);
-        wait.until(ExpectedConditions.elementToBeClickable(butCookieCanc));
-        butCookieCanc.click();
-        } catch(TimeoutException e) {}
-        
+            wait.until(ExpectedConditions.elementToBeClickable(butCookieCanc));
+            butCookieCanc.click();
+        } catch (TimeoutException e) {
+        }
 
         WebElement heading = SectionPay.head(driver);
         assertEquals("Онлайн пополнение\nбез комиссии", heading.getText());
