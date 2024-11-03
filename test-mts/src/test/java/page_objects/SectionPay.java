@@ -32,6 +32,10 @@ public class SectionPay {
         return driver.findElement(By.cssSelector(".pay")).findElement(By.cssSelector("a"));
     }
 
+    public static String textFromDetailedServ(WebDriver driver) {
+        return driver.findElement(By.cssSelector("div.wrapper")).getText();
+    }
+
     public static WebElement connection(WebDriver driver) {
         return driver.findElement(By.cssSelector("#pay-section .select__now"));
     }

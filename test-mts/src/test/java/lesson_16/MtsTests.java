@@ -18,83 +18,97 @@ import page_objects.SectionPay;
 
 public class MtsTests {
     WebDriver driver;
+    WebDriverWait wait;
+
+    String tel = "297777777";
+    String sum = "100.00";
+    String email = "test@testmail.com";
+
+    WebElement sectPay;
 
     @BeforeAll
-    private static void setupClass() {
+    public static void setupClass() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
-    private void createDriver() {
+    public void createDriver() {
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         driver.get("https://www.mts.by/");
-    }
-
-    @AfterEach
-    private void teardown() {
-        driver.quit();
-    }
-
-    @Test
-    public void test() {
-        String tel;
-        String sum;
-        String email;
-        tel = "297777777";
-        sum = "100.00";
-        email = "test@testmail.com";
-
         driver.manage().deleteAllCookies();
 
         String title = driver.getTitle();
         assertEquals("МТС – мобильный оператор в Беларуси", title);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             WebElement butCookieCanc = CoockieActions.buttonCancel(driver);
             wait.until(ExpectedConditions.elementToBeClickable(butCookieCanc));
             butCookieCanc.click();
-        } catch (TimeoutException e) {
+        } catch (Exception e) {
         }
+    }
 
+    @AfterEach
+    public void teardown() {
+        driver.quit();
+    }
+
+    @Test
+    @DisplayName("Checking the name of the replenishment block")
+    public void testCheckName() {
         WebElement heading = SectionPay.head(driver);
         assertEquals("Онлайн пополнение\nбез комиссии", heading.getText());
+    }
 
+    @Test
+    @DisplayName("Logo check")
+    public void testCheckLogo() {
         WebElement payPartnersList = SectionPay.partnersList(driver);
-        assertEquals(payPartnersList.isDisplayed(), true);
+        assertTrue(payPartnersList.isDisplayed());
         assertEquals(SectionPay.partnersListArr(driver).size(), 5);
+    }
 
+    @Test
+    @DisplayName("Link check")
+    public void testCheckLink() {
         WebElement ancorDetailedServ = SectionPay.detailedServ(driver);
-        assertEquals(ancorDetailedServ.isDisplayed(), true);
+        assertTrue(ancorDetailedServ.isDisplayed());
         assertEquals("Подробнее о сервисе", ancorDetailedServ.getText());
         assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/",
                 ancorDetailedServ.getAttribute("href"));
         ancorDetailedServ.click();
         assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/",
                 driver.getCurrentUrl());
+        String allText = SectionPay.textFromDetailedServ(driver);
+        assertTrue(allText.contains("Оплата банковской картой"));
+        assertTrue(allText.contains("Информация о безопасности Интернет-платежей"));
+        assertTrue(allText.contains("Условия возврата денежных средств"));
         driver.navigate().back();
+    }
 
+    @Test
+    @DisplayName("Form check")
+    public void testCheckForm() {
         assertEquals("Услуги связи", SectionPay.connection(driver).getText());
         WebElement formPayments = SectionPay.form(driver);
-        assertEquals(formPayments.isDisplayed(), true);
+        assertTrue(formPayments.isDisplayed());
 
         assertEquals(SectionPay.telGetAttr(driver, "placeholder"), "Номер телефона");
-
         SectionPay.fillInputTel(driver, tel);
 
         assertEquals(SectionPay.sumGetAttr(driver, "placeholder"), "Сумма");
-
         SectionPay.fillInputSum(driver, sum);
 
         assertEquals(SectionPay.emailGetAttr(driver, "placeholder"), "E-mail для отправки чека");
-
         SectionPay.fillInputEmail(driver, email);
 
         WebElement butt = SectionPay.continueButt(driver);
         assertEquals("Продолжить", butt.getText());
         butt.click();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(FramePayment.byFrame));
+        WebDriverWait waitForIframe = new WebDriverWait(driver, Duration.ofSeconds(10));
+        waitForIframe.until(ExpectedConditions.visibilityOfElementLocated(FramePayment.byFrame));
 
         WebElement iframePayment = FramePayment.frame(driver);
         driver.switchTo().frame(iframePayment);
